@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import FaceBook from './Component/FaceBook';
+import place from "./place.jpg"
+import place2 from "./place2.jpg"
+import place3 from "./place3.jpg"
+import place4 from "./place4.jpg"
+import place5 from "./place5.jpg"
+import place6 from "./place6.jpg"
+import place7 from "./place7.jpg"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {
+  BrowserRouter as Router,
+  StaticRouter, // for server rendering
+  Route,
+  Link
+  // etc.
+} from "react-router-dom";
+import FacebookEmoji from 'react-facebook-emoji';
+
+class App extends Component {
+  state = {
+    createdBy: 'Junaid Pinger',
+    description: "I'am feeling chill today",
+    emoji: <FacebookEmoji type="yay" size="xxs" />,
+    createdAt: Date(),
+  }
+
+  render() {
+    const { createdBy, description, emoji } = this.state
+    const d = Date(Date.now()).substring(0, 22);
+    const avatar = "data:image/jpeg;base64,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"
+    const img = [place, place2, place3, place4, place5, place6, place7]
+    return (
+      <div className="App">
+        <FaceBook pic={avatar} name={createdBy} date={d} description={description} emoji={emoji} images={img} />
+      </div>
+    );
+  }
 }
 
 export default App;
